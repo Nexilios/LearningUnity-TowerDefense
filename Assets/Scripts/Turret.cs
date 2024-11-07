@@ -3,23 +3,30 @@ using UnityEngine;
 public class Turret : MonoBehaviour
 {
     private Transform _target;
-    public float range = 15f;
-
-    public string enemyTag = "Enemy";
     
-    public Transform partToRotate;
+    [Header("Attribute")]
+    public float range = 15f;
+    public float fireRate = 1f;
     public float turnSpeed = 5f;
-    private Quaternion originalRotation;
+    private float _fireCountdown;
+    private Quaternion _originalRotation;
+    
+    [Header("Unity Setup Fields")]
+    public string enemyTag = "Enemy";
+    public Transform partToRotate;
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (partToRotate)
         {
-            originalRotation = partToRotate.rotation;
+            _originalRotation = partToRotate.rotation;
         }
         
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        InvokeRepeating(nameof(UpdateTarget), 0f, 0.5f);
     }
 
     void UpdateTarget()
@@ -53,9 +60,9 @@ public class Turret : MonoBehaviour
     {
         if (!_target)
         {
-            if (partToRotate && partToRotate.rotation != originalRotation)
+            if (partToRotate && partToRotate.rotation != _originalRotation)
             {
-                partToRotate.rotation = Quaternion.Lerp(partToRotate.rotation, originalRotation, Time.deltaTime * turnSpeed);
+                partToRotate.rotation = Quaternion.Lerp(partToRotate.rotation, _originalRotation, Time.deltaTime * turnSpeed);
             }
             return;
         }
@@ -64,8 +71,27 @@ public class Turret : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+
+        if (_fireCountdown <= 0f)
+        {
+            Shoot();
+            _fireCountdown = 1f / fireRate;    
+        }
+        
+        _fireCountdown -= Time.deltaTime;
     }
 
+    void Shoot()
+    {
+        GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+
+        if (bullet)
+        {
+            bullet.SetTarget(_target);
+        }
+    }
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
