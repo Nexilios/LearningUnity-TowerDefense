@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
     public float panSpeed = 30f;
     public float scrollSpeed = 150f;
-    public float vPanBorderThickness = Screen.height/ 5f;
-    public float hPanBorderThickness = Screen.width/ 5f;
+    public float vPanBorderThickness = Screen.height/ 25f;
+    public float hPanBorderThickness = Screen.width/ 25f;
     public float zoomInLimit = 10f;
     public float zoomOutLimit = 80f;
     public float xRotationLowerLimit = 10f;

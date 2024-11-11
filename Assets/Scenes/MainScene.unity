@@ -3113,10 +3113,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4ab0a474e9604e459b5440ff35aae7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 60
-  scrollSpeed: 200
-  vPanBorderThickness: 48
-  hPanBorderThickness: 64
+  panSpeed: 50
+  scrollSpeed: 250
+  vPanBorderThickness: 37.64
+  hPanBorderThickness: 19.04
   zoomInLimit: 10
   zoomOutLimit: 80
   xRotationLowerLimit: 10
@@ -13067,7 +13067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standardTurretPrefab: {fileID: 2486793626025381847, guid: d970386ef6112854ea754327fc4c3bbb, type: 3}
-  anotherTurretPrefab: {fileID: 2486793626025381847, guid: 9bb773fa6eebb204782f5c51c914b4dd, type: 3}
+  missileLauncherPrefab: {fileID: 282232519586340807, guid: 7210d0f5d4cb06849a2ffd74c399fd87, type: 3}
 --- !u!1001 &1563876875
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14418,7 +14418,15 @@ PrefabInstance:
       objectReference: {fileID: 648084032}
     - target: {fileID: 1428415540242742921, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PurchaseAnotherTurret
+      value: PurchaseMissileLauncher
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732494830709106332, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732494830709106332, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
+      propertyPath: m_PreferredHeight
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4398130728670071174, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
       propertyPath: m_Pivot.x
@@ -14502,8 +14510,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4575524962268394978, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
       propertyPath: m_Name
-      value: AnotherTurretItem
+      value: MissleLauncherItem
       objectReference: {fileID: 0}
+    - target: {fileID: 6582427213114054776, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 630a355b4aa171645a1e15eba658bf94, type: 3}
     - target: {fileID: 6582427213114054776, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -17286,6 +17298,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 648084032}
+    - target: {fileID: 3732494830709106332, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
+      propertyPath: m_PreferredWidth
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3732494830709106332, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
+      propertyPath: m_PreferredHeight
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 4398130728670071174, guid: 94013c5cc2599ba45bdaa93164953833, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
