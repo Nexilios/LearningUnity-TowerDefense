@@ -1,7 +1,5 @@
 using UnityEngine;
 
-
-
 public class CameraController : MonoBehaviour {
     public float panSpeed = 30f;
     public float scrollSpeed = 150f;
@@ -12,34 +10,50 @@ public class CameraController : MonoBehaviour {
     public float xRotationLowerLimit = 10f;
     public float xRotationUpperLimit = 90f;
     
-    private bool _doMovement = true;
+    public bool mousePanning;
     
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-            _doMovement = !_doMovement;
-        if (!_doMovement)
-            return;
+            mousePanning = !mousePanning;
         
-        if (Input.GetAxis("Vertical") > 0 || Input.mousePosition.y >= Screen.height - vPanBorderThickness)
+        bool moveForward = false;
+        bool moveBackward = false;
+        bool moveLeft = false;
+        bool moveRight = false;
+
+        // Move camera by mouse
+        if (mousePanning)
         {
+            if (Input.mousePosition.y >= Screen.height - vPanBorderThickness)
+                moveForward = true;
+            if (Input.mousePosition.y <= vPanBorderThickness)
+                moveBackward = true;
+            if (Input.mousePosition.x <= hPanBorderThickness)
+                moveLeft = true;
+            if (Input.mousePosition.x >= Screen.width - hPanBorderThickness)
+                moveRight = true;
+        }
+
+        // Move camera by keyboard
+        if (Input.GetAxis("Vertical") > 0)
+            moveForward = true;
+        if (Input.GetAxis("Vertical") < 0)
+            moveBackward = true;
+        if (Input.GetAxis("Horizontal") < 0)
+            moveLeft = true;
+        if (Input.GetAxis("Horizontal") > 0)
+            moveRight = true;
+        
+        // Move the camera
+        if (moveForward)
             transform.Translate(Vector3.forward * (panSpeed * Time.deltaTime), Space.World);
-        }
-
-        if (Input.GetAxis("Vertical") < 0 || Input.mousePosition.y <= vPanBorderThickness)
-        {
+        if (moveBackward)
             transform.Translate(Vector3.back * (panSpeed * Time.deltaTime), Space.World);
-        }
-
-        if (Input.GetAxis("Horizontal") < 0 || Input.mousePosition.x <= hPanBorderThickness)
-        {
+        if (moveLeft)
             transform.Translate(Vector3.left * (panSpeed * Time.deltaTime), Space.World);
-        }
-
-        if (Input.GetAxis("Horizontal") > 0 || Input.mousePosition.x >= Screen.width - hPanBorderThickness)
-        {
+        if (moveRight)
             transform.Translate(Vector3.right * (panSpeed * Time.deltaTime), Space.World);
-        }
 
         // Camera zoom
         if ((Input.GetAxis("Mouse ScrollWheel") > 0f) && transform.position.y > zoomInLimit)
