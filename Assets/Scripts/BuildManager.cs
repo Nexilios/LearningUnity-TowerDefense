@@ -3,11 +3,9 @@ using UnityEngine;
 public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance;
-
-    public GameObject standardTurretPrefab;
-    public GameObject missileLauncherPrefab;
     
-    private GameObject _turretToBuild;
+    private TurretBlueprint _turretToBuild;
+    public bool CanBuildTurret => _turretToBuild != null;
 
     void Awake()
     {
@@ -15,13 +13,23 @@ public class BuildManager : MonoBehaviour
             Instance = this;
     }
     
-    public GameObject GetTurretToBuild()
-    {
-        return _turretToBuild;
-    }
-
-    public void SetTurretToBuild(GameObject turret)
+    public void SelectTurretToBuild(TurretBlueprint turret)
     {
         _turretToBuild = turret;
+    }
+
+    public void BuildTurret(Node node)
+    {
+        if (PlayerStats.Money < _turretToBuild.cost)
+        {
+            Debug.Log("Not enough money to build turret");
+            return;
+        }
+        
+        PlayerStats.Money -= _turretToBuild.cost;
+        GameObject turret = Instantiate(_turretToBuild.prefab, node.GetBuildPosition(), Quaternion.identity);
+        node.turret = turret;
+        
+        Debug.Log("Turret Built! Money left: " + PlayerStats.Money);
     }
 }
