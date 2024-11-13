@@ -9,7 +9,7 @@ public class WaveSpawner : MonoBehaviour
     public Transform spawnPoint;
     public TextMeshProUGUI waveCountText;
     
-    public float timeBetweenSpawns = 5f;
+    public float timeBetweenWave = 5f;
     private float _countdown = 3f;
 
     private int _waveIndex;
@@ -18,11 +18,12 @@ public class WaveSpawner : MonoBehaviour
         if (_countdown <= 0f)
         {
             StartCoroutine(SpawnWave());
-            _countdown = timeBetweenSpawns;
+            _countdown = timeBetweenWave;
         }
         
-        waveCountText.text = Mathf.Ceil(_countdown).ToString(CultureInfo.CurrentCulture);
-        _countdown -= Time.deltaTime;
+        waveCountText.text = $"{_countdown:00.00}";
+        
+        _countdown = Mathf.Clamp(_countdown - Time.deltaTime, 0f, Mathf.Infinity);
     }
 
     IEnumerator SpawnWave()
