@@ -4,6 +4,11 @@ using UnityEngine;
 public class MoneyUI : MonoBehaviour
 {
     public TextMeshProUGUI moneyText;
+
+    void Start()
+    {
+        UpdateMoneyUI();
+    }
     
     void OnEnable()
     {
