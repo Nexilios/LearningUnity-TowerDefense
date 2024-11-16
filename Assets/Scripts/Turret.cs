@@ -4,21 +4,27 @@ public class Turret : MonoBehaviour
 {
     private Transform _target;
     
-    [Header("Attribute")]
+    [Header("General")]
     public float range = 15f;
-    public float fireRate = 1f;
     public float turnSpeed = 5f;
-    private float _fireCountdown;
     private Quaternion _originalRotation;
+    
+    [Header("Use Bullets (default)")]
+    public GameObject bulletPrefab;
+    public float fireRate = 1f;
+    private float _fireCountdown;
+    
+    [Header("Use Laser")]
+    public bool useLaser;
+    public LineRenderer lineRenderer;
+    public ParticleSystem impactEffect;
+    public Light impactLight;
     
     [Header("Unity Setup Fields")]
     public string enemyTag = "Enemy";
     public Transform partToRotate;
-    public GameObject bulletPrefab;
     public Transform firePoint;
-
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (partToRotate)
@@ -55,7 +61,6 @@ public class Turret : MonoBehaviour
         }
     }
     
-    // Update is called once per frame
     void Update()
     {
         if (!_target)
@@ -64,23 +69,63 @@ public class Turret : MonoBehaviour
             {
                 partToRotate.rotation = Quaternion.Lerp(partToRotate.rotation, _originalRotation, Time.deltaTime * turnSpeed);
             }
+
+            if (useLaser && lineRenderer.enabled)
+            {
+                lineRenderer.enabled = false;
+                impactEffect.Stop();
+                impactLight.enabled = false;
+            } 
+            
             return;
         }
+
+        LockOnTarget();
+
+        if (useLaser)
+        {
+            Laser();
+        }
+        else
+        {
+            if (_fireCountdown <= 0f)
+            {
+                Shoot();
+                _fireCountdown = 1f / fireRate;    
+            }
+            
+            _fireCountdown -= Time.deltaTime;
+        }
         
+    }
+
+    void LockOnTarget()
+    {
+        // Target Lock-on
         Vector3 dir = _target.position - transform.position;
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-
-        if (_fireCountdown <= 0f)
-        {
-            Shoot();
-            _fireCountdown = 1f / fireRate;    
-        }
-        
-        _fireCountdown -= Time.deltaTime;
     }
 
+    void Laser()
+    {
+        if (!lineRenderer.enabled)
+        {
+            lineRenderer.enabled = true;
+            impactEffect.Play();
+            impactLight.enabled = true;
+        }
+        
+        lineRenderer.SetPosition(0, firePoint.position);
+        lineRenderer.SetPosition(1, _target.position);
+
+        Vector3 dir = firePoint.position - _target.position;
+        
+        impactEffect.transform.position = _target.position + dir.normalized;
+        impactEffect.transform.rotation = Quaternion.LookRotation(dir);
+    }
+    
     void Shoot()
     {
         GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
