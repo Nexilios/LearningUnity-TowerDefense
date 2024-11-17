@@ -14406,7 +14406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startLives: 1
-  startMoney: 400
+  startMoney: 2500
 --- !u!114 &1559923862
 MonoBehaviour:
   m_ObjectHideFlags: 0
