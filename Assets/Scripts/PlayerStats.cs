@@ -12,6 +12,8 @@ public class PlayerStats : MonoBehaviour
     private static int _lives;
     private static int _money;
 
+    public static int Rounds;
+    
     public static int Lives
     {
         get => _lives;
@@ -39,7 +41,7 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         Lives = startLives;
-        Debug.Log(Lives);
         Money = startMoney;
+        Rounds = 0;
     }
 }
