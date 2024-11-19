@@ -9,7 +9,7 @@ public class Shop : MonoBehaviour
 
     void Start()
     {
-        _buildManager = BuildManager.Instance;
+        _buildManager = BuildManager.instance;
     }
     public void SelectStandardTurret()
     {

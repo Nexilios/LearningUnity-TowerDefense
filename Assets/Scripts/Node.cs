@@ -19,7 +19,7 @@ public class Node : MonoBehaviour
     {
         _rend = GetComponent<Renderer>();
         _startColor = _rend.material.color;
-        _buildManager = BuildManager.Instance;
+        _buildManager = BuildManager.instance;
     }
     
     void OnMouseEnter()
@@ -43,14 +43,14 @@ public class Node : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
             return;
         
-        if (!_buildManager.CanBuildTurret)
-            return;
-        
         if (turret)
         {
-            Debug.Log("Can't build here! - TODO: Display on screen.");
+            _buildManager.SelectNode(this);
             return;
         }
+        
+        if (!_buildManager.CanBuildTurret)
+            return;
         
         _buildManager.BuildTurret(this);
     }
