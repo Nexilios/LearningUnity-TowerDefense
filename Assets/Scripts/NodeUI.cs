@@ -1,8 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class NodeUI : MonoBehaviour
 {
     public GameObject canvasUI;
+
+    public Button upgradeButton;
+    public TextMeshProUGUI upgradeCost;
+    public Button sellButton;
+    public TextMeshProUGUI sellAmount;
     
     private Node _target;
 
@@ -11,6 +18,17 @@ public class NodeUI : MonoBehaviour
         _target = target;
 
         transform.position = _target.GetBuildPosition();
+
+        if (!_target.isUpgraded)
+        {
+            upgradeCost.text = "$" + target.turretBlueprint.upgradeCost;
+            upgradeButton.interactable = true;    
+        }
+        else
+        {
+            upgradeCost.text = "DONE";
+            upgradeButton.interactable = false;
+        }
         
         canvasUI.SetActive(true);
     }
@@ -18,5 +36,11 @@ public class NodeUI : MonoBehaviour
     public void Hide()
     {
         canvasUI.SetActive(false);
+    }
+
+    public void Upgrade()
+    {
+        _target.UpgradeTurret();
+        BuildManager.instance.DeselectNode();
     }
 }
