@@ -26,6 +26,17 @@ public class Node : MonoBehaviour
         _buildManager = BuildManager.instance;
     }
 
+    public void SellTurret()
+    {
+        PlayerStats.Money += turretBlueprint.GetSellAmount();
+        
+        GameObject effect = Instantiate(_buildManager.sellEffect, GetBuildPosition(), Quaternion.identity);
+        Destroy(effect, 5f);
+        
+        Destroy(turret);
+        turretBlueprint = null;
+    }
+
     public void UpgradeTurret()
     {
         if (PlayerStats.Money < turretBlueprint.upgradeCost)
