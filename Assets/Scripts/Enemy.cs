@@ -42,10 +42,13 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         _dead = true;
+        
         PlayerStats.Money += worth;
         
         GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
         Destroy(effect, 5f);
+
+        WaveSpawner.enemiesAlive--;
         
         Destroy(gameObject);
     }

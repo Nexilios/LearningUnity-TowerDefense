@@ -1,11 +1,12 @@
 using System.Collections;
-using System.Globalization;
 using TMPro;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
-    public Transform enemyPrefab;
+    public static int enemiesAlive;
+
+    public Wave[] waves;
     public Transform spawnPoint;
     public TextMeshProUGUI waveCountText;
     
@@ -15,10 +16,14 @@ public class WaveSpawner : MonoBehaviour
     private int _waveIndex;
     private void Update()
     {
+        if (enemiesAlive > 0 || GameManager.GameIsOver) 
+            return;
+        
         if (_countdown <= 0f)
         {
             StartCoroutine(SpawnWave());
             _countdown = timeBetweenWave;
+            return;
         }
         
         waveCountText.text = $"{_countdown:00.00}";
@@ -28,19 +33,28 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator SpawnWave()
     {
-        _waveIndex++;
         PlayerStats.Rounds++;
         
-        for (int i = 0; i < _waveIndex; i++)
+        Wave wave = waves[_waveIndex];
+        
+        for (int i = 0; i < wave.enemyCount; i++)
         {
-            SpawnEnemy();
-            yield return new WaitForSeconds(0.25f);
+            SpawnEnemy(wave.enemyPrefab);
+            yield return new WaitForSeconds(1f / wave.spawnRate);
         }
         
+        _waveIndex++;
+
+        if (_waveIndex == waves.Length)
+        {
+            Debug.Log("LEVEL WON!");
+            this.enabled = false;
+        }
     }
 
-    void SpawnEnemy()
+    void SpawnEnemy(GameObject enemy)
     {
-        Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        Instantiate(enemy, spawnPoint.position, spawnPoint.rotation);
+        enemiesAlive++;
     }
 }
